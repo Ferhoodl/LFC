@@ -2,6 +2,7 @@
 #include <stdint.h>
 #define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+// Enum for names to reduce state's board data
 enum pieces : uint8_t{
 	W_KING,
 	W_QUEEN,
@@ -17,6 +18,7 @@ enum pieces : uint8_t{
 	B_PAWN
 };
 
+// Same as pieces. Using Aliases for uint8_t to reduce state data
 enum castlingAbility : uint8_t{
 	WHITE_KINGSIDE,
 	WHITE_QUEENSIDE,
@@ -31,6 +33,10 @@ enum activePiece : uint8_t{
 	BLACK
 };
 
+// We use a single byte to keep track of en-passant-able squares for each color.
+// Each pawn-rank square is a bit in the color's byte. We can flip bits using 
+// the appropriate bit-flip mask and the bitwise exclusive OR operator (^).
+// This enum defines all needed bit-flip masks.
 enum enPassBitManips : uint8_t{
 	C1 = 0x80,
 	C2 = 0x40,
@@ -42,14 +48,19 @@ enum enPassBitManips : uint8_t{
 	C8 = 0x01
 };
 
-
+// Struct to represent game state. Equivalent in meaning to FEN.
 struct state{
-	uint8_t board[12][12];
+	uint8_t board[12][12]; // We are using the 'Mailbox' board representation
 	uint8_t activeColor;
 	uint8_t whiteCastlingAbility;
 	uint8_t blackCastlingAbility;
-	
+	uint8_t whiteEnPassant;
+	uint8_t blackEnPassant;
+	uint8_t halfmoveClock;
+	uint8_t fullmoveNumber;
 };
+
+
 
 int main(){
 	
